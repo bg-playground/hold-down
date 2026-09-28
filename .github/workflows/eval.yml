@@ -1,0 +1,18 @@
+name: eval
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Eval card
+        run: python -m unittest discover -s tests -v
+      - name: Suite report
+        run: PYTHONPATH=src python -m holddown

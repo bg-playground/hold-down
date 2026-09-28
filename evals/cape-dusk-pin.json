@@ -1,0 +1,114 @@
+{
+  "launchId": "cape-dusk",
+  "verdict": "pin",
+  "reason": "released",
+  "findings": [
+    "Space View Park released after playalinda-beach failed an independent check."
+  ],
+  "intent": {
+    "schema": "hold-down.navigation-intent.v1",
+    "siteId": "space-view-park",
+    "label": "Space View Park",
+    "lat": 28.6274,
+    "lon": -80.8072,
+    "distanceKm": 23.6,
+    "arrivalBufferMin": 90,
+    "source": "gazetteer",
+    "disclaimer": "Document only. Not a clearance, not an official viewing site, and not a sent route."
+  },
+  "tokens": 584,
+  "latencyMs": 320,
+  "escapedHazard": false,
+  "events": [
+    {
+      "id": "e1",
+      "actor": "tool",
+      "name": "get_launch",
+      "detail": "cape-dusk status=go net=true",
+      "tokens": 90,
+      "earned": true,
+      "toolCallId": "call_e1"
+    },
+    {
+      "id": "e2",
+      "actor": "planner",
+      "name": "propose",
+      "detail": "playalinda-beach, space-view-park, jetty-park",
+      "tokens": 140,
+      "earned": true,
+      "toolCallId": null
+    },
+    {
+      "id": "e3",
+      "actor": "tool",
+      "name": "get_launch",
+      "detail": "cape-dusk status=go net=true",
+      "tokens": 90,
+      "earned": true,
+      "toolCallId": "call_e3"
+    },
+    {
+      "id": "e4",
+      "actor": "tool",
+      "name": "get_weather",
+      "detail": "flight=go viewer=clear wind=8kt",
+      "tokens": 70,
+      "earned": true,
+      "toolCallId": "call_e4"
+    },
+    {
+      "id": "e5",
+      "actor": "tool",
+      "name": "get_closure",
+      "detail": "playalinda-beach",
+      "tokens": 50,
+      "earned": true,
+      "toolCallId": "call_e5"
+    },
+    {
+      "id": "e6",
+      "actor": "tool",
+      "name": "resolve_site",
+      "detail": "playalinda-beach gazetteer",
+      "tokens": 40,
+      "earned": true,
+      "toolCallId": "call_e6"
+    },
+    {
+      "id": "e7",
+      "actor": "critic",
+      "name": "site_closure",
+      "detail": "playalinda-beach: Listed on this launch's closure fixture.",
+      "tokens": 24,
+      "earned": true,
+      "toolCallId": "call_e6"
+    },
+    {
+      "id": "e8",
+      "actor": "tool",
+      "name": "resolve_site",
+      "detail": "space-view-park gazetteer",
+      "tokens": 40,
+      "earned": true,
+      "toolCallId": "call_e8"
+    },
+    {
+      "id": "e9",
+      "actor": "critic",
+      "name": "site_accept",
+      "detail": "space-view-park: 23.6 km, outside the closure fixture.",
+      "tokens": 24,
+      "earned": true,
+      "toolCallId": "call_e8"
+    },
+    {
+      "id": "e10",
+      "actor": "gate",
+      "name": "release",
+      "detail": "space-view-park navigation intent",
+      "tokens": 16,
+      "earned": true,
+      "toolCallId": null
+    }
+  ]
+}
