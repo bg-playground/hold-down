@@ -78,20 +78,20 @@ SITES: dict[str, Site] = {
     "boca-chica-beach": Site(
         "boca-chica-beach", "Boca Chica Beach", "starbase", 25.9965, -97.155, "On the range"
     ),
-    "isla-blanca": Site(
-        "isla-blanca",
-        "Isla Blanca viewpoint",
+    "north-island-demo": Site(
+        "north-island-demo",
+        "North island demo point",
         "starbase",
         26.1,
         -97.17,
-        "Approximate north-island gazetteer point",
+        "Demo point placed outside the 10 km floor. Not a surveyed viewpoint.",
     ),
 }
 
 PREFERENCE: dict[str, tuple[str, ...]] = {
     "cape": ("playalinda-beach", "space-view-park", "jetty-park"),
     "vandenberg": ("surf-beach", "harris-grade"),
-    "starbase": ("boca-chica-beach", "isla-blanca"),
+    "starbase": ("boca-chica-beach", "north-island-demo"),
 }
 
 LAUNCHES: dict[str, Launch] = {
@@ -131,6 +131,13 @@ LAUNCHES: dict[str, Launch] = {
             ("boca-chica-beach",),
         ),
     )
+}
+
+
+RANGE_TZ = {
+    "cape": "America/New_York",
+    "vandenberg": "America/Los_Angeles",
+    "starbase": "America/Chicago",
 }
 
 

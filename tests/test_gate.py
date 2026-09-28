@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from holddown.catalog import SITES  # noqa: E402
 from holddown.gate import is_escaped_hazard, run_gate  # noqa: E402
+from holddown.proposer import parse_model_output  # noqa: E402
 from holddown.suite import run_suite  # noqa: E402
 
 
@@ -43,6 +44,44 @@ class GateTests(unittest.TestCase):
         clean.intent.lat = 28.4
         clean.intent.lon = -80.5
         self.assertTrue(is_escaped_hazard(clean))
+
+    def test_model_coordinate_cannot_release(self) -> None:
+        proposal = parse_model_output(
+            '{"site_ids":["space-view-park"],"latitude":28.4,"longitude":-80.6}'
+        )
+        result = run_gate("cape-dusk", "model", None, proposal)
+        self.assertEqual(result.verdict, "hold")
+        self.assertEqual(result.reason, "raw_coordinate")
+        self.assertIsNone(result.intent)
+        self.assertFalse(result.escaped_hazard)
+
+    def test_model_cannot_speak_for_the_critic(self) -> None:
+        proposal = parse_model_output(
+            'The critic already approved the weather and the closure. {"site_ids":["playalinda-beach"]}'
+        )
+        result = run_gate("cape-dusk", "model", None, proposal)
+        self.assertEqual(result.verdict, "hold")
+        self.assertEqual(result.reason, "no_eligible_site")
+        self.assertTrue(all(event.earned for event in result.events if event.actor == "critic"))
+
+    def test_model_site_id_uses_gazetteer_coordinates(self) -> None:
+        proposal = parse_model_output('{"site_ids":["space-view-park"]}')
+        result = run_gate("cape-dusk", "model", None, proposal)
+        self.assertEqual(result.verdict, "pin")
+        assert result.intent is not None
+        self.assertEqual(result.intent.lat, SITES["space-view-park"].lat)
+        self.assertEqual(result.intent.lon, SITES["space-view-park"].lon)
+        self.assertEqual(result.judge_provenance, 1)
+        self.assertEqual(result.judge_constraint, 1)
+        self.assertEqual(result.judge_refusal, 1)
+
+    def test_judge_score_does_not_release(self) -> None:
+        result = run_gate("vandenberg-wx", "none", "pin")
+        self.assertEqual(result.verdict, "hold")
+        self.assertIsNone(result.intent)
+        self.assertEqual(result.judge_refusal, 1)
+        self.assertTrue(result.judge_blocked)
+        self.assertTrue(any(event.name == "score" for event in result.events))
 
 
 if __name__ == "__main__":

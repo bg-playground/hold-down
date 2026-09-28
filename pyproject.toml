@@ -1,6 +1,6 @@
 [project]
 name = "hold-down"
-version = "0.1.0"
+version = "0.2.0"
 description = "Fail-closed launch viewing gate. A navigation intent is released only after an independent constraint check."
 readme = "README.md"
 requires-python = ">=3.11"
